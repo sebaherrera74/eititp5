@@ -23,9 +23,9 @@ actual coincida con la hora de la alarma.
 
 
 
-void test_inicial(void){
+/* void test_inicial(void){
     TEST_FAIL_MESSAGE("Iniciamos");
-}
+}*/
  
  void test_clock_start(void){
     static const uint8_t ESPERADO[]={0,0,0,0,0,0};
