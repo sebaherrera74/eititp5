@@ -37,3 +37,21 @@ actual coincida con la hora de la alarma.
  }
 
 
+//2-La librería deberá proporcionar una función para ajustar la hora actual.
+
+void test_set_up_current_time(void){
+  static const uint8_t INICIAL[]={1,2,3,4};
+  static const uint8_t ESPERADO[]={1,2,3,4,0,0};
+  uint8_t hora[6];
+  clock_t reloj=ClockCreate(5);
+  ClockSetupTime(reloj,INICIAL,sizeof(INICIAL));
+  TEST_ASSERT_TRUE(ClockGetTime(reloj,hora,sizeof(hora)));
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
+}
+
+
+
+
+
+
+
