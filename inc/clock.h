@@ -8,4 +8,4 @@ clock_t ClockCreate(uint16_t ticks_per_seconds);
 
 bool ClockGetTime(clock_t clock,uint8_t * time,uint8_t size);
 
-void ClockSetupTime(clock_t clock,uint8_t * time,uint8_t size);
+void ClockSetupTime(clock_t clock,const uint8_t * const time,uint8_t size);
