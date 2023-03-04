@@ -29,6 +29,8 @@ actual coincida con la hora de la alarma.
 
 #define TICKS_PER_SECOND 5
  
+
+ //Configurar la libreria, consultar la hora y tiene que ser invalida
  void test_clock_start(void){
     static const uint8_t ESPERADO[]={0,0,0,0,0,0};
     uint8_t hora[6];
@@ -38,9 +40,8 @@ actual coincida con la hora de la alarma.
     
  }
 
-
-//2-La librería deberá proporcionar una función para ajustar la hora actual.
-
+//Configurar la libreria, ajustar la hora (con valores correctos)consultar la hora y tienen que ser 
+//valida
 void test_set_up_current_time(void){
   static const uint8_t INICIAL[]={1,2,3,4};
   static const uint8_t ESPERADO[]={1,2,3,4,0,0};
@@ -51,8 +52,21 @@ void test_set_up_current_time(void){
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
 
+//Simular el paso de n ciclos de reloj, consultar la hora y verificar que avanzo un segundo
 
-
+void test_one_second_elapsed(void){
+  static const uint8_t INICIAL[]={1,2,3,4};
+  static const uint8_t ESPERADO[]={1,2,3,4,0,1}; //Hora esperada despues de un segundo
+  uint8_t hora[6];
+  
+  clock_t reloj=ClockCreate(TICKS_PER_SECOND);
+  ClockSetupTime(reloj,INICIAL,sizeof(INICIAL));
+  for(int index=0;index<TICKS_PER_SECOND;index++){
+    clockNewTick(reloj);
+  }
+  ClockGetTime(reloj,hora,sizeof(hora));
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
+}
 
 
 
