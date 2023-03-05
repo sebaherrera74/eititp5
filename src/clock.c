@@ -6,7 +6,17 @@
 
 #define TIME_SIZE 6
 #define START_VALUE 0
-#define SECUNDS_UNIT 5 //pOSICION DE LA UNIDAD DE SEGUNDOS
+#define SECONDS_UNIT 5 //pOSICION DE LA UNIDAD DE SEGUNDOS
+#define SECONDS_TENS 4 //pOSICION DE LA DECENA DE SEGUNDOS
+
+#define MINUTS_UNIT  3 //pOSICION DE LA UNIDAD DE MINUTOS
+#define MINUTS_TENS  2 //pOSICION DE LA DECENA DE MINUTOS
+
+#define HOURS_UNIT  1 //pOSICION DE LA UNIDAD DE HORAS
+#define HOURS_TENS  0 //pOSICION DE LA DECENA DE HORAS
+
+
+
 struct clock_s {
     uint8_t time[TIME_SIZE];
     bool valid;
@@ -42,10 +52,14 @@ void clockNewTick(clock_t clock){
     clock->ticks_count++;
     if(clock->ticks_count==clock->ticks_per_seconds){
         clock->ticks_count=START_VALUE;
-        clock->time[SECUNDS_UNIT]++;                 //si los tick lleagorn a l valor de ticks por segundo
-        if(clock->time[SECUNDS_UNIT]==10){
-            clock->time[SECUNDS_UNIT]=0;
-            clock->time[4]++;
+        clock->time[SECONDS_UNIT]++;                 //si los tick lleagorn a l valor de ticks por segundo
+        if(clock->time[SECONDS_UNIT]==10){
+            clock->time[SECONDS_UNIT]=0;
+            clock->time[SECONDS_TENS]++;
+        } 
+        if(clock->time[SECONDS_TENS]==6){
+            clock->time[SECONDS_TENS]=0;
+            clock->time[MINUTS_UNIT]++;
         } 
 
 
