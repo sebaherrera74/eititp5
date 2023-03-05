@@ -38,6 +38,12 @@ void setUp(void){
   ClockSetupTime(reloj,INICIAL,sizeof(INICIAL));
 }
 
+void SimulateSeconds(int seconds){
+  for(int index=0;index<seconds*TICKS_PER_SECOND;index++){
+     clockNewTick(reloj);
+  }
+
+}
  //Configurar la libreria, consultar la hora y tiene que ser invalida
  void test_clock_start(void){
     static const uint8_t ESPERADO[]={0,0,0,0,0,0};
@@ -61,9 +67,7 @@ void test_one_second_elapsed(void){
   
   static const uint8_t ESPERADO[]={1,2,3,4,0,1}; //Hora esperada despues de un segundo
   uint8_t hora[6];
-  for(int index=0;index<TICKS_PER_SECOND;index++){
-    clockNewTick(reloj);
-  }
+  SimulateSeconds(1);
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
@@ -74,9 +78,10 @@ void test_ten_second_elapsed(void){
   
   static const uint8_t ESPERADO[]={1,2,3,4,1,0}; //Hora esperada despues de 10 segundo seg
   uint8_t hora[6];
-  for(int index=0;index<10*TICKS_PER_SECOND;index++){
-    clockNewTick(reloj);
-  }
+   SimulateSeconds(10);
+  //for(int index=0;index<10*TICKS_PER_SECOND;index++){
+  //  clockNewTick(reloj);
+  //}
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
