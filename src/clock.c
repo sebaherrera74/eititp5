@@ -52,7 +52,7 @@ void clockNewTick(clock_t clock){
     clock->ticks_count++;
     if(clock->ticks_count==clock->ticks_per_seconds){
         clock->ticks_count=START_VALUE;
-        clock->time[SECONDS_UNIT]++;                 //si los tick lleagorn a l valor de ticks por segundo
+        clock->time[SECONDS_UNIT]++;                 //si los tick llegaron a l valor de ticks por segundo
         if(clock->time[SECONDS_UNIT]==10){
             clock->time[SECONDS_UNIT]=0;
             clock->time[SECONDS_TENS]++;
@@ -60,16 +60,18 @@ void clockNewTick(clock_t clock){
             if(clock->time[SECONDS_TENS]==6){
                 clock->time[SECONDS_TENS]=0;
                 clock->time[MINUTS_UNIT]++;
+
                 if(clock->time[MINUTS_UNIT]==10){
                     clock->time[MINUTS_UNIT]=0;
                     clock->time[MINUTS_TENS]++;
+                    
+                    if(clock->time[MINUTS_TENS]==6){
+                        clock->time[MINUTS_TENS]=0;
+                        clock->time[HOURS_UNIT]++;
                     }
             }
         }
 
-    }                                                
-    
-    
-
-
+    } 
+    }
 }
