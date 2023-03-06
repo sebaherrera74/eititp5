@@ -48,9 +48,11 @@ void SimulateSeconds(int seconds){
  void test_clock_start(void){
     static const uint8_t ESPERADO[]={0,0,0,0,0,0};
     uint8_t hora[6];
-    clock_t reloj=ClockCreate(TICKS_PER_SECOND);                 //Paso 5 segundos
+    uint8_t alarma[4];
+    clock_t reloj=ClockCreate(TICKS_PER_SECOND);                 
     TEST_ASSERT_FALSE(ClockGetTime(reloj,hora,sizeof(hora)));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
+    TEST_ASSERT_FALSE(ClockGetAlarm(reloj,alarma,sizeof(alarma)));
   }
 
 //Configurar la libreria, ajustar la hora (con valores correctos)consultar la hora y tienen
@@ -129,12 +131,27 @@ void test_twelve_hora_elapsed(void){
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
 
-//Test de pongo en hora la alarma y me fjo si esta activada
+ 
+// 7) Configurar la hora de la alarma (con valores correctos) y revisar si la guarda.
+// 9) Configurar la hora de la alarma (con valores correctos) y revisar si la queda activada.
 
 void test_setup_and_get_alarm(void){
   static const uint8_t ALARMA[]={1,2,3,5};
   uint8_t hora[4];
   ClockSetupAlarm(reloj,ALARMA,sizeof(ALARMA));
   TEST_ASSERT_TRUE(ClockGetAlarm(reloj,hora,sizeof(hora)));
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(ALARMA,hora,sizeof(ALARMA));
+}
+
+
+//Si la alarma esta activa y la desactivo. queda desactiva , pero no cambia la hora.  
+
+void test_setup_and_disable_alarm(void){
+  static const uint8_t ALARMA[]={1,2,3,5};
+  uint8_t hora[4];
+  ClockSetupAlarm(reloj,ALARMA,sizeof(ALARMA));
+  TEST_ASSERT_FALSE(ClockToggleAlarm(reloj));
+
+  TEST_ASSERT_FALSE(ClockGetAlarm(reloj,hora,sizeof(hora)));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ALARMA,hora,sizeof(ALARMA));
 }

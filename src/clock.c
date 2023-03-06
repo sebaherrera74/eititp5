@@ -26,6 +26,7 @@
 struct clock_s {
     uint8_t time[TIME_SIZE];
     uint8_t alarm[ALARM_SIZE];
+    bool enabled;                  //Variable para habilitacion o no de la alarma
     bool valid;
     uint16_t ticks_per_seconds;
     uint16_t ticks_count;
@@ -36,6 +37,7 @@ static struct clock_s instances;
 
 clock_t ClockCreate(uint16_t ticks_per_seconds){
     instances.valid=false;
+    instances.enabled=false;
     memset(instances.time,START_VALUE,TIME_SIZE);
     instances.ticks_per_seconds=ticks_per_seconds;  //Guardo el valor de los ticks por segundo
     instances.ticks_count=START_VALUE;              //contador de ticks inicializo a cero   
@@ -99,11 +101,16 @@ void clockNewTick(clock_t clock){
 
 void ClockSetupAlarm(clock_t clock,uint8_t const * const alarm ,uint8_t size){
     memcpy(clock->alarm,alarm,size);
+    clock->enabled=true;
 }
 
 bool ClockGetAlarm(clock_t clock,uint8_t * alarm,uint8_t size){
-    memcpy(alarm,clock->alarm,size);
-    return true;
+   memcpy(alarm,clock->alarm,size);
+   return clock->enabled;
 }
 
-//Si la alarma esta activa y la desactivo  
+bool ClockToggleAlarm(clock_t clock){
+     clock->enabled=!clock->enabled;
+     return clock->enabled;
+} 
+
