@@ -68,10 +68,22 @@ void clockNewTick(clock_t clock){
                     if(clock->time[MINUTS_TENS]==6){
                         clock->time[MINUTS_TENS]=0;
                         clock->time[HOURS_UNIT]++;
+
+                        if(clock->time[HOURS_UNIT]==10){
+                        clock->time[HOURS_UNIT]=0;
+                        clock->time[HOURS_TENS]++;
+                        }
+                      
+                        if((clock->time[HOURS_TENS]==2)&&(clock->time[HOURS_UNIT]==4)){
+                            
+                                clock->time[HOURS_UNIT]=0;
+                                clock->time[HOURS_TENS]=0;
+                              
+                        }          
                     }
+                   
             }
         }
-
     } 
     }
 }

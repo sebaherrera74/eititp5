@@ -78,10 +78,7 @@ void test_ten_second_elapsed(void){
   
   static const uint8_t ESPERADO[]={1,2,3,4,1,0}; //Hora esperada despues de 10 segundo seg
   uint8_t hora[6];
-   SimulateSeconds(10);
-  //for(int index=0;index<10*TICKS_PER_SECOND;index++){
-  //  clockNewTick(reloj);
-  //}
+  SimulateSeconds(10);
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
@@ -90,10 +87,7 @@ void test_one_minute_elapsed(void){
   
   static const uint8_t ESPERADO[]={1,2,3,5,0,0}; 
   uint8_t hora[6];
-   SimulateSeconds(60);
-  //for(int index=0;index<10*TICKS_PER_SECOND;index++){
-  //  clockNewTick(reloj);
-  //}
+  SimulateSeconds(60);
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
@@ -102,10 +96,7 @@ void test_ten_minute_elapsed(void){
   
   static const uint8_t ESPERADO[]={1,2,4,4,0,0}; 
   uint8_t hora[6];
-   SimulateSeconds(10*60);
-  //for(int index=0;index<10*TICKS_PER_SECOND;index++){
-  //  clockNewTick(reloj);
-  //}
+  SimulateSeconds(10*60);
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
@@ -115,10 +106,26 @@ void test_one_hora_elapsed(void){
   
   static const uint8_t ESPERADO[]={1,3,3,4,0,0}; 
   uint8_t hora[6];
-   SimulateSeconds(60*60);
-  //for(int index=0;index<10*TICKS_PER_SECOND;index++){
-  //  clockNewTick(reloj);
-  //}
+  SimulateSeconds(60*60);
+  ClockGetTime(reloj,hora,sizeof(hora));
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
+}
+
+void test_ten_hora_elapsed(void){
+  
+  static const uint8_t ESPERADO[]={2,2,3,4,0,0}; 
+  uint8_t hora[6];
+  SimulateSeconds(10*60*60);
+  ClockGetTime(reloj,hora,sizeof(hora));
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
+}
+
+//Prueba de las 12 horas 
+void test_twelve_hora_elapsed(void){
+  
+  static const uint8_t ESPERADO[]={0,0,3,4,0,0}; 
+  uint8_t hora[6];
+  SimulateSeconds(12*60*60);
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
