@@ -122,10 +122,19 @@ void test_ten_hora_elapsed(void){
 
 //Prueba de las 12 horas 
 void test_twelve_hora_elapsed(void){
-  
   static const uint8_t ESPERADO[]={0,0,3,4,0,0}; 
   uint8_t hora[6];
   SimulateSeconds(12*60*60);
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
+}
+
+//Test de pongo en hora la alarma y me fjo si esta activada
+
+void test_setup_and_get_alarm(void){
+  static const uint8_t ALARMA[]={1,2,3,5};
+  uint8_t hora[4];
+  ClockSetupAlarm(reloj,ALARMA,sizeof(ALARMA));
+  TEST_ASSERT_TRUE(ClockGetAlarm(reloj,hora,sizeof(hora)));
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(ALARMA,hora,sizeof(ALARMA));
 }

@@ -5,6 +5,8 @@
 
 
 #define TIME_SIZE 6
+#define ALARM_SIZE 4
+
 #define START_VALUE 0
 #define SECONDS_UNIT 5 //pOSICION DE LA UNIDAD DE SEGUNDOS
 #define SECONDS_TENS 4 //pOSICION DE LA DECENA DE SEGUNDOS
@@ -20,8 +22,10 @@
 
 #define MAX_VALUE_HOURS_UNITS  4
 #define MAX_VALUE_HOURS_TENS   2
+
 struct clock_s {
     uint8_t time[TIME_SIZE];
+    uint8_t alarm[ALARM_SIZE];
     bool valid;
     uint16_t ticks_per_seconds;
     uint16_t ticks_count;
@@ -46,7 +50,7 @@ bool ClockGetTime(clock_t clock,uint8_t * time,uint8_t size){
 
 
 void ClockSetupTime(clock_t clock,const uint8_t * const time,uint8_t size){
-     memcpy(clock->time,time,size);
+    memcpy(clock->time,time,size);
     clock->valid=true;
 }
 
@@ -91,3 +95,15 @@ void clockNewTick(clock_t clock){
     } 
     }
 }
+
+
+void ClockSetupAlarm(clock_t clock,uint8_t const * const alarm ,uint8_t size){
+    memcpy(clock->alarm,alarm,size);
+}
+
+bool ClockGetAlarm(clock_t clock,uint8_t * alarm,uint8_t size){
+    memcpy(alarm,clock->alarm,size);
+    return true;
+}
+
+//Si la alarma esta activa y la desactivo  
