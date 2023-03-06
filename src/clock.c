@@ -15,8 +15,11 @@
 #define HOURS_UNIT  1 //pOSICION DE LA UNIDAD DE HORAS
 #define HOURS_TENS  0 //pOSICION DE LA DECENA DE HORAS
 
+#define MAX_VALUE_UNITS 10 //valor maximo que toman las unidades en los seg, minutosy horas
+#define MAX_VALUE_TENS  6 //valor maximo que toman las decenas en los seg y minutos
 
-
+#define MAX_VALUE_HOURS_UNITS  4
+#define MAX_VALUE_HOURS_TENS   2
 struct clock_s {
     uint8_t time[TIME_SIZE];
     bool valid;
@@ -53,31 +56,32 @@ void clockNewTick(clock_t clock){
     if(clock->ticks_count==clock->ticks_per_seconds){
         clock->ticks_count=START_VALUE;
         clock->time[SECONDS_UNIT]++;                 //si los tick llegaron a l valor de ticks por segundo
-        if(clock->time[SECONDS_UNIT]==10){
-            clock->time[SECONDS_UNIT]=0;
+        if(clock->time[SECONDS_UNIT]==MAX_VALUE_UNITS){
+            clock->time[SECONDS_UNIT]=START_VALUE;
             clock->time[SECONDS_TENS]++;
 
-            if(clock->time[SECONDS_TENS]==6){
-                clock->time[SECONDS_TENS]=0;
+            if(clock->time[SECONDS_TENS]==MAX_VALUE_TENS){
+                clock->time[SECONDS_TENS]=START_VALUE;
                 clock->time[MINUTS_UNIT]++;
 
-                if(clock->time[MINUTS_UNIT]==10){
-                    clock->time[MINUTS_UNIT]=0;
+                if(clock->time[MINUTS_UNIT]==MAX_VALUE_UNITS){
+                    clock->time[MINUTS_UNIT]=START_VALUE;
                     clock->time[MINUTS_TENS]++;
                     
-                    if(clock->time[MINUTS_TENS]==6){
-                        clock->time[MINUTS_TENS]=0;
+                    if(clock->time[MINUTS_TENS]==MAX_VALUE_TENS){
+                        clock->time[MINUTS_TENS]=START_VALUE;
                         clock->time[HOURS_UNIT]++;
 
-                        if(clock->time[HOURS_UNIT]==10){
-                        clock->time[HOURS_UNIT]=0;
+                        if(clock->time[HOURS_UNIT]==MAX_VALUE_UNITS){
+                        clock->time[HOURS_UNIT]=START_VALUE;
                         clock->time[HOURS_TENS]++;
                         }
                       
-                        if((clock->time[HOURS_TENS]==2)&&(clock->time[HOURS_UNIT]==4)){
-                            
-                                clock->time[HOURS_UNIT]=0;
-                                clock->time[HOURS_TENS]=0;
+                        if((clock->time[HOURS_TENS]==MAX_VALUE_HOURS_TENS)
+                                            &&(clock->time[HOURS_UNIT]==MAX_VALUE_HOURS_UNITS)){
+                           
+                                clock->time[HOURS_UNIT]=START_VALUE;
+                                clock->time[HOURS_TENS]=START_VALUE;
                               
                         }          
                     }
