@@ -3,8 +3,9 @@
 
 typedef struct clock_s * clock_t;
 
+typedef void(*clock_event_t)(clock_t clock,bool enabled);
 
-clock_t ClockCreate(uint16_t ticks_per_seconds);
+clock_t ClockCreate(uint16_t ticks_per_seconds,clock_event_t event_handler);
 
 bool ClockGetTime(clock_t clock,uint8_t * time,uint8_t size);
 

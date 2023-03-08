@@ -30,14 +30,16 @@ struct clock_s {
     bool valid;
     uint16_t ticks_per_seconds;
     uint16_t ticks_count;
+    clock_event_t event_handler;
 };
 
 static struct clock_s instances;
 
 
-clock_t ClockCreate(uint16_t ticks_per_seconds){
+clock_t ClockCreate(uint16_t ticks_per_seconds,clock_event_t event_handler){
     instances.valid=false;
     instances.enabled=false;
+    instances.event_handler=event_handler;
     memset(instances.time,START_VALUE,TIME_SIZE);
     instances.ticks_per_seconds=ticks_per_seconds;  //Guardo el valor de los ticks por segundo
     instances.ticks_count=START_VALUE;              //contador de ticks inicializo a cero   
@@ -81,23 +83,39 @@ void clockNewTick(clock_t clock){
                         if(clock->time[HOURS_UNIT]==MAX_VALUE_UNITS){
                         clock->time[HOURS_UNIT]=START_VALUE;
                         clock->time[HOURS_TENS]++;
+                   
                         }
-                      
                         if((clock->time[HOURS_TENS]==MAX_VALUE_HOURS_TENS)
                                             &&(clock->time[HOURS_UNIT]==MAX_VALUE_HOURS_UNITS)){
                            
                                 clock->time[HOURS_UNIT]=START_VALUE;
                                 clock->time[HOURS_TENS]=START_VALUE;
-                              
-                        }          
+                                            }  
+                                       
                     }
-                   
+            }
+        
+       
+        }
+           
+    }
+    
+   //Chequeo si cuando paso los segundos la hora coincide con la alarma
+        bool activate=(clock->time[SECONDS_TENS]==0) && (clock->time[SECONDS_UNIT]==0);
+        for( int index=0;index<ALARM_SIZE;index++){
+            if ((clock->alarm[index])!=(clock->time [index])){
+                activate=false;
+                break;
             }
         }
-    } 
-    }
+        if (activate){
+            clock->event_handler(clock,true);
+        } 
+    }    
+
 }
 
+ 
 
 void ClockSetupAlarm(clock_t clock,uint8_t const * const alarm ,uint8_t size){
     memcpy(clock->alarm,alarm,size);

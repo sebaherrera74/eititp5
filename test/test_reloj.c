@@ -29,27 +29,34 @@ actual coincida con la hora de la alarma.
 
 #define TICKS_PER_SECOND 5
  
- clock_t reloj;
+clock_t reloj;
+bool alarm_state;
 
 //Refactor de codigo que va repitiendo en las pruebas
-void setUp(void){
- static const uint8_t INICIAL[]={1,2,3,4};
-  reloj=ClockCreate(TICKS_PER_SECOND);
-  ClockSetupTime(reloj,INICIAL,sizeof(INICIAL));
-}
-
 void SimulateSeconds(int seconds){
   for(int index=0;index<seconds*TICKS_PER_SECOND;index++){
      clockNewTick(reloj);
   }
-
 }
+
+void AlarmEventHandler(clock_t clock,bool state){
+  alarm_state=state;
+}
+
+
+void setUp(void){
+ static const uint8_t INICIAL[]={1,2,3,4};
+  reloj=ClockCreate(TICKS_PER_SECOND,AlarmEventHandler);
+  ClockSetupTime(reloj,INICIAL,sizeof(INICIAL));
+  alarm_state=false;
+}
+
  //Configurar la libreria, consultar la hora y tiene que ser invalida
  void test_clock_start(void){
     static const uint8_t ESPERADO[]={0,0,0,0,0,0};
     uint8_t hora[6];
     uint8_t alarma[4];
-    clock_t reloj=ClockCreate(TICKS_PER_SECOND);                 
+    clock_t reloj=ClockCreate(TICKS_PER_SECOND,AlarmEventHandler);                 
     TEST_ASSERT_FALSE(ClockGetTime(reloj,hora,sizeof(hora)));
     TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
     TEST_ASSERT_FALSE(ClockGetAlarm(reloj,alarma,sizeof(alarma)));
@@ -130,7 +137,6 @@ void test_twelve_hora_elapsed(void){
   ClockGetTime(reloj,hora,sizeof(hora));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ESPERADO,hora,sizeof(ESPERADO));
 }
-
  
 // 7) Configurar la hora de la alarma (con valores correctos) y revisar si la guarda.
 // 9) Configurar la hora de la alarma (con valores correctos) y revisar si la queda activada.
@@ -154,4 +160,14 @@ void test_setup_and_disable_alarm(void){
 
   TEST_ASSERT_FALSE(ClockGetAlarm(reloj,hora,sizeof(hora)));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ALARMA,hora,sizeof(ALARMA));
+}
+
+void test_setup_and_fire_alarm(void){
+  static const uint8_t ALARMA[]={1,2,3,5};
+  ClockSetupAlarm(reloj,ALARMA,sizeof(ALARMA));
+  SimulateSeconds(60);                         //Pasan 60 segundos y para que suene la alarma
+  //Aqui compruebo si sono la alarma 
+  ///TEST_ASSERT(SONO_LA_ALARMA)
+  TEST_ASSERT_TRUE(alarm_state);
+
 }
