@@ -161,6 +161,8 @@ void test_setup_and_disable_alarm(void){
   TEST_ASSERT_FALSE(ClockGetAlarm(reloj,hora,sizeof(hora)));
   TEST_ASSERT_EQUAL_UINT8_ARRAY(ALARMA,hora,sizeof(ALARMA));
 }
+// Si la alarma esta activa, y la hora del reloj coincide con la hora de 
+//la alarma, entonces suena
 
 void test_setup_and_fire_alarm(void){
   static const uint8_t ALARMA[]={1,2,3,5};
@@ -169,5 +171,4 @@ void test_setup_and_fire_alarm(void){
   //Aqui compruebo si sono la alarma 
   ///TEST_ASSERT(SONO_LA_ALARMA)
   TEST_ASSERT_TRUE(alarm_state);
-
 }
